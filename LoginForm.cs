@@ -8,7 +8,7 @@ namespace WindowsFormsApp1
 {
     public partial class LoginForm : Form
     {
-        // 建议使用单例 HttpClient (生产环境最佳实践)
+        // 使用静态 HttpClient 复用连接
         private static readonly HttpClient client = new HttpClient();
 
         public LoginForm()
@@ -21,7 +21,7 @@ namespace WindowsFormsApp1
             string username = txtUsername.Text;
             string password = txtPassword.Text;
 
-            // [修改 1] 匹配 API 文档的端口 5000 和路径
+            // [API] 登录接口地址 (根据 API.md)
             string backendUrl = "http://localhost:5000/api/Auth/login";
 
             var loginData = new { username = username, password = password };
@@ -30,21 +30,21 @@ namespace WindowsFormsApp1
 
             try
             {
-                // 发送 POST 请求
+                btnLogin.Enabled = false; // 防止重复点击
                 var response = await client.PostAsync(backendUrl, content);
 
                 if (response.IsSuccessStatusCode)
                 {
                     var responseString = await response.Content.ReadAsStringAsync();
 
-                    // [修改 2] 使用正确的响应模型解析
+                    // 反序列化响应
                     var result = JsonConvert.DeserializeObject<LoginResponse>(responseString);
 
-                    if (result != null && !string.IsNullOrEmpty(result.Token))
+                    if (result != null && result.Success && !string.IsNullOrEmpty(result.Token))
                     {
-                        MessageBox.Show("登录成功!");
+                        MessageBox.Show($"登录成功! 欢迎 {result.Username}");
 
-                        // [修改 3] 将 Token 传递给主窗口 (而不是 UserId)
+                        // [关键] 传递 Token 到主窗口
                         MainForm mainForm = new MainForm(result.Token, result.Username);
                         this.Hide();
                         mainForm.ShowDialog();
@@ -52,27 +52,31 @@ namespace WindowsFormsApp1
                     }
                     else
                     {
-                        MessageBox.Show("登录失败: 无法获取 Token");
+                        MessageBox.Show("登录失败: " + (result?.Message ?? "未知错误"));
                     }
                 }
                 else
                 {
-                    MessageBox.Show($"登录失败: {response.StatusCode}\n请检查后端是否运行在端口 5000");
+                    MessageBox.Show($"请求失败: {response.StatusCode} (请确认后端已启动)");
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("连接错误: " + ex.Message);
             }
+            finally
+            {
+                btnLogin.Enabled = true;
+            }
         }
     }
 
-    // [修改 4] 对应 API.md 的登录响应结构
+    // [Model] 对应 API 登录响应结构
     public class LoginResponse
     {
         public bool Success { get; set; }
         public string Message { get; set; }
-        public string Token { get; set; } // 核心字段
+        public string Token { get; set; }
         public string Username { get; set; }
     }
 }
