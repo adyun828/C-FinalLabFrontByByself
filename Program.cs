@@ -17,9 +17,9 @@ namespace WindowsFormsApp1
 
             // --- 全局异常捕获 (防止闪退) ---
             // 捕获 UI 线程异常
-            Application.ThreadException += (sender, e) => HandleException(e.Exception);
+            Application.ThreadException += (sender, e) => HandleException(e?.Exception ?? new Exception("Unknown error"));
             // 捕获非 UI 线程异常
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) => HandleException(e.ExceptionObject as Exception);
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) => HandleException((e.ExceptionObject as Exception) ?? new Exception("Unknown error"));
 
             try
             {

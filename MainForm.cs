@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using Frontend.Models;
 
 namespace WindowsFormsApp1
 {
@@ -14,10 +15,9 @@ namespace WindowsFormsApp1
     {
         private string _token;
         private string _username;
-        private List<ImageInfo> _images; // 缓存当前的图片列表
+        private List<ImageInfo>? _images;
         private int _currentIndex = 0;
 
-        // [API] 基础地址
         private const string BaseUrl = "http://localhost:5000/api";
         private static readonly HttpClient client = new HttpClient();
 
@@ -27,27 +27,30 @@ namespace WindowsFormsApp1
             _token = token;
             _username = username;
 
-            // [关键] 设置全局 JWT 认证头
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", _token);
+            // 设置 Token
+            if (client.DefaultRequestHeaders.Authorization == null)
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", _token);
+            }
 
-            this.Text = $"图像筛选系统 - 操作员: {_username}";
+            // --- 1. 更新右上角用户信息 ---
+            lblUserInfo.Text = $"👤 操作员: {_username}";
 
-            // 窗体加载后自动获取图片
+            // ---------------------------
+
             this.Load += (s, e) => LoadImages();
         }
 
-        // [API] 获取图片列表
         private async void LoadImages()
         {
-            string url = $"{BaseUrl}/Images?count=5"; // 一次请求5张
+            // 获取图片逻辑 (保持不变)
+            string url = $"{BaseUrl}/Images?count=5";
             try
             {
-                lblImageId.Text = "正在获取数据...";
+                lblImageId.Text = "正在从云端获取任务...";
                 var response = await client.GetStringAsync(url);
-
-                // 反序列化
-                _images = JsonConvert.DeserializeObject<List<ImageInfo>>(response);
+                _images = JsonConvert.DeserializeObject<List<ImageInfo>>(response) ?? new List<ImageInfo>();
 
                 if (_images != null && _images.Count > 0)
                 {
@@ -56,16 +59,17 @@ namespace WindowsFormsApp1
                 }
                 else
                 {
-                    MessageBox.Show("服务端没有返回任何图片。");
+                    MessageBox.Show("当前没有待处理的图片任务。");
+                    lblImageId.Text = "暂无任务";
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"无法连接服务器: {ex.Message}\n请检查 http://localhost:5000 是否运行。");
+                MessageBox.Show($"连接服务器失败: {ex.Message}");
+                lblImageId.Text = "服务器连接断开";
             }
         }
 
-        // 显示图片逻辑
         private void ShowImage(int index)
         {
             if (_images != null && index >= 0 && index < _images.Count)
@@ -75,38 +79,33 @@ namespace WindowsFormsApp1
 
                 try
                 {
-                    // [关键] Base64 转 Image
                     if (!string.IsNullOrEmpty(img.IMageBase64))
                     {
                         byte[] imageBytes = Convert.FromBase64String(img.IMageBase64);
                         using (var ms = new MemoryStream(imageBytes))
                         {
-                            // 必须复制流，否则可能会在Dispose后无法重绘
                             picMain.Image = Image.FromStream(ms);
                         }
                     }
                 }
                 catch
                 {
-                    lblImageId.Text += " (图像数据损坏)";
                     picMain.Image = null;
                 }
             }
         }
 
-        // [API] 提交评价
         private async void SubmitDecision(string apiOption)
         {
-            if (_images == null || _images.Count == 0 || _currentIndex >= _images.Count) return;
+            if (_images == null || _images.Count == 0) return;
 
             var currentImage = _images[_currentIndex];
             string url = $"{BaseUrl}/Selections";
 
-            // 构造 Payload
             var payload = new
             {
                 imageId = currentImage.Id,
-                selectedOption = apiOption // 只能是 "优", "良", "差"
+                selectedOption = apiOption
             };
 
             var json = JsonConvert.SerializeObject(payload);
@@ -117,7 +116,6 @@ namespace WindowsFormsApp1
                 var response = await client.PostAsync(url, content);
                 if (response.IsSuccessStatusCode)
                 {
-                    // 成功后，自动显示下一张
                     _currentIndex++;
                     if (_currentIndex < _images.Count)
                     {
@@ -125,52 +123,45 @@ namespace WindowsFormsApp1
                     }
                     else
                     {
-                        var result = MessageBox.Show("本批图片已处理完毕，是否加载新图片？", "完成", MessageBoxButtons.YesNo);
+                        var result = MessageBox.Show("本批次任务已完成，是否加载新任务？", "完成", MessageBoxButtons.YesNo);
                         if (result == DialogResult.Yes)
                         {
                             LoadImages();
                         }
                         else
                         {
-                            lblImageId.Text = "等待新任务...";
+                            lblImageId.Text = "任务完成";
                             picMain.Image = null;
                         }
                     }
                 }
-                else
-                {
-                    MessageBox.Show($"提交失败: {response.StatusCode}");
-                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("提交错误: " + ex.Message);
+                MessageBox.Show("提交失败: " + ex.Message);
             }
         }
 
-        // --- 按钮事件映射 ---
-
-        // "保留" 映射为 "优"
+        // 按钮事件
         private void btnKeep_Click(object sender, EventArgs e) => SubmitDecision("优");
-
-        // "丢弃" 映射为 "差"
         private void btnDiscard_Click(object sender, EventArgs e) => SubmitDecision("差");
-
-        // 图像增强 (纯客户端演示功能)
         private void btnEnhance_Click(object sender, EventArgs e)
         {
-            if (picMain.Image == null) return;
-            MessageBox.Show("图像增强处理已完成 (模拟)。", "系统提示");
+            if (picMain.Image == null || _images == null || _currentIndex >= _images.Count) return;
+            MessageBox.Show($"正在对图片 [ID:{_images[_currentIndex].Id}] 进行AI增强处理...", "系统处理中");
         }
-    }
 
-    // [Model] 图片数据模型
-    public class ImageInfo
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        // 注意：Newtonsoft.Json 默认不区分大小写，可以自动匹配 iMageBase64
-        public string IMageBase64 { get; set; }
-        public string Type { get; set; }
+        // 上传图片按钮事件
+        private void btnUploadImage_Click(object sender, EventArgs e)
+        {
+            UploadImageForm uploadForm = new UploadImageForm(_token);
+            DialogResult result = uploadForm.ShowDialog();
+            
+            // 如果上传成功，重新加载图片列表
+            if (result == DialogResult.OK)
+            {
+                LoadImages();
+            }
+        }
     }
 }

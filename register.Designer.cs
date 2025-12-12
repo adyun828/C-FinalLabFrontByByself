@@ -1,191 +1,168 @@
 ﻿namespace WindowsFormsApp1
 {
-    partial class register
+    partial class RegisterForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        private System.Windows.Forms.Panel pnlHeader;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblIcon;
+
+        private System.Windows.Forms.Label lblUser;
+        private System.Windows.Forms.TextBox txtUser;
+
+        private System.Windows.Forms.Label lblPass1;
+        private System.Windows.Forms.TextBox txtPass1;
+
+        private System.Windows.Forms.Label lblPass2;
+        private System.Windows.Forms.TextBox txtPass2;
+
+        private System.Windows.Forms.CheckBox chkShowPass;
+        private System.Windows.Forms.Button btnSubmit;
+        private System.Windows.Forms.Button btnCancel;
+
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
+            if (disposing && (components != null)) components.Dispose();
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.Button btnClose;
-            this.pictureBox = new System.Windows.Forms.PictureBox();
-            this.regTitle = new System.Windows.Forms.Label();
-            this.reg_panel = new System.Windows.Forms.Panel();
-            this.btnlogin = new System.Windows.Forms.Button();
-            this.btnregister = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.text_password2 = new System.Windows.Forms.TextBox();
-            this.text_password1 = new System.Windows.Forms.TextBox();
-            this.text_user = new System.Windows.Forms.TextBox();
-            btnClose = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
-            this.reg_panel.SuspendLayout();
+            this.pnlHeader = new System.Windows.Forms.Panel();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.lblIcon = new System.Windows.Forms.Label();
+            this.lblUser = new System.Windows.Forms.Label();
+            this.txtUser = new System.Windows.Forms.TextBox();
+            this.lblPass1 = new System.Windows.Forms.Label();
+            this.txtPass1 = new System.Windows.Forms.TextBox();
+            this.lblPass2 = new System.Windows.Forms.Label();
+            this.txtPass2 = new System.Windows.Forms.TextBox();
+            this.chkShowPass = new System.Windows.Forms.CheckBox();
+            this.btnSubmit = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.pnlHeader.SuspendLayout();
             this.SuspendLayout();
+
             // 
-            // btnClose
+            // 窗体设置 (加长一点，因为内容多)
             // 
-            btnClose.BackColor = System.Drawing.SystemColors.ControlLight;
-            btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            btnClose.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            btnClose.ForeColor = System.Drawing.SystemColors.HotTrack;
-            btnClose.Image = global::WindowsFormsApp1.Properties.Resources.屏幕截图_2025_12_06_154800;
-            btnClose.Location = new System.Drawing.Point(773, 0);
-            btnClose.Name = "btnClose";
-            btnClose.Size = new System.Drawing.Size(34, 48);
-            btnClose.TabIndex = 3;
-            btnClose.Text = "×";
-            btnClose.UseVisualStyleBackColor = false;
-            btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.ClientSize = new System.Drawing.Size(380, 550);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.BackColor = System.Drawing.Color.White;
+            this.Text = "新用户注册";
+
             // 
-            // pictureBox
+            // 顶部栏
             // 
-            this.pictureBox.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox.Image = global::WindowsFormsApp1.Properties.Resources.bg_login;
-            this.pictureBox.Location = new System.Drawing.Point(-1, 0);
-            this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(808, 539);
-            this.pictureBox.TabIndex = 0;
-            this.pictureBox.TabStop = false;
-            this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
-            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
+            this.pnlHeader.BackColor = System.Drawing.Color.MediumSeaGreen; // 注册用绿色，区分登录
+            this.pnlHeader.Controls.Add(this.lblTitle);
+            this.pnlHeader.Controls.Add(this.lblIcon);
+            this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlHeader.Height = 100;
+
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.ForeColor = System.Drawing.Color.White;
+            this.lblTitle.Location = new System.Drawing.Point(20, 30);
+            this.lblTitle.Text = "创建账号";
+
+            this.lblIcon.AutoSize = true;
+            this.lblIcon.Font = new System.Drawing.Font("Segoe UI", 40F);
+            this.lblIcon.Location = new System.Drawing.Point(260, 15);
+            this.lblIcon.Text = "📝";
+
             // 
-            // regTitle
+            // 输入控件群
             // 
-            this.regTitle.AutoSize = true;
-            this.regTitle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.regTitle.Font = new System.Drawing.Font("微软雅黑", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.regTitle.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.regTitle.Image = global::WindowsFormsApp1.Properties.Resources.屏幕截图_2025_12_06_154800;
-            this.regTitle.Location = new System.Drawing.Point(322, 61);
-            this.regTitle.Name = "regTitle";
-            this.regTitle.Size = new System.Drawing.Size(144, 75);
-            this.regTitle.TabIndex = 1;
-            this.regTitle.Text = "注册";
+            // 用户名
+            this.lblUser.AutoSize = true;
+            this.lblUser.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblUser.Location = new System.Drawing.Point(40, 130);
+            this.lblUser.Text = "用户名";
+
+            this.txtUser.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.txtUser.Location = new System.Drawing.Point(44, 155);
+            this.txtUser.Size = new System.Drawing.Size(290, 29);
+
+            // 密码
+            this.lblPass1.AutoSize = true;
+            this.lblPass1.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblPass1.Location = new System.Drawing.Point(40, 200);
+            this.lblPass1.Text = "设置密码";
+
+            this.txtPass1.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.txtPass1.Location = new System.Drawing.Point(44, 225);
+            this.txtPass1.Size = new System.Drawing.Size(290, 29);
+            this.txtPass1.PasswordChar = '●';
+
+            // 确认密码
+            this.lblPass2.AutoSize = true;
+            this.lblPass2.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblPass2.Location = new System.Drawing.Point(40, 270);
+            this.lblPass2.Text = "确认密码";
+
+            this.txtPass2.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.txtPass2.Location = new System.Drawing.Point(44, 295);
+            this.txtPass2.Size = new System.Drawing.Size(290, 29);
+            this.txtPass2.PasswordChar = '●';
+
+            // 显示密码
+            this.chkShowPass.AutoSize = true;
+            this.chkShowPass.Location = new System.Drawing.Point(44, 335);
+            this.chkShowPass.Text = "显示密码";
+            this.chkShowPass.CheckedChanged += new System.EventHandler(this.chkShowPass_CheckedChanged);
+
             // 
-            // reg_panel
+            // 提交按钮 (绿色)
             // 
-            this.reg_panel.Controls.Add(this.btnlogin);
-            this.reg_panel.Controls.Add(this.btnregister);
-            this.reg_panel.Controls.Add(this.checkBox1);
-            this.reg_panel.Controls.Add(this.text_password2);
-            this.reg_panel.Controls.Add(this.text_password1);
-            this.reg_panel.Controls.Add(this.text_user);
-            this.reg_panel.Location = new System.Drawing.Point(234, 167);
-            this.reg_panel.Name = "reg_panel";
-            this.reg_panel.Size = new System.Drawing.Size(311, 332);
-            this.reg_panel.TabIndex = 2;
+            this.btnSubmit.BackColor = System.Drawing.Color.MediumSeaGreen;
+            this.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubmit.FlatAppearance.BorderSize = 0;
+            this.btnSubmit.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btnSubmit.ForeColor = System.Drawing.Color.White;
+            this.btnSubmit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSubmit.Location = new System.Drawing.Point(44, 380);
+            this.btnSubmit.Size = new System.Drawing.Size(290, 45);
+            this.btnSubmit.Text = "立即注册";
+            this.btnSubmit.UseVisualStyleBackColor = false;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
+
             // 
-            // btnlogin
+            // 取消按钮
             // 
-            this.btnlogin.Location = new System.Drawing.Point(33, 276);
-            this.btnlogin.Name = "btnlogin";
-            this.btnlogin.Size = new System.Drawing.Size(251, 32);
-            this.btnlogin.TabIndex = 5;
-            this.btnlogin.Text = "登录";
-            this.btnlogin.UseVisualStyleBackColor = true;
-            this.btnlogin.Click += new System.EventHandler(this.btnlogin_Click);
+            this.btnCancel.BackColor = System.Drawing.Color.White;
+            this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCancel.FlatAppearance.BorderSize = 0;
+            this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.btnCancel.ForeColor = System.Drawing.Color.Gray;
+            this.btnCancel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCancel.Location = new System.Drawing.Point(44, 440);
+            this.btnCancel.Size = new System.Drawing.Size(290, 30);
+            this.btnCancel.Text = "取消返回";
+            this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+
             // 
-            // btnregister
+            // 添加控件
             // 
-            this.btnregister.Location = new System.Drawing.Point(33, 238);
-            this.btnregister.Name = "btnregister";
-            this.btnregister.Size = new System.Drawing.Size(250, 32);
-            this.btnregister.TabIndex = 4;
-            this.btnregister.Text = "注册";
-            this.btnregister.UseVisualStyleBackColor = true;
-            this.btnregister.Click += new System.EventHandler(this.btnregister_Click);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(32, 194);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(106, 22);
-            this.checkBox1.TabIndex = 3;
-            this.checkBox1.Text = "显示密码";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // text_password2
-            // 
-            this.text_password2.Location = new System.Drawing.Point(32, 151);
-            this.text_password2.Name = "text_password2";
-            this.text_password2.Size = new System.Drawing.Size(252, 28);
-            this.text_password2.TabIndex = 2;
-            this.text_password2.Enter += new System.EventHandler(this.text_password2_GotFocus);
-            this.text_password2.Leave += new System.EventHandler(this.text_password2_LostFocus);
-            // 
-            // text_password1
-            // 
-            this.text_password1.Location = new System.Drawing.Point(32, 92);
-            this.text_password1.Name = "text_password1";
-            this.text_password1.Size = new System.Drawing.Size(252, 28);
-            this.text_password1.TabIndex = 1;
-            this.text_password1.Enter += new System.EventHandler(this.text_password1_GotFocus);
-            this.text_password1.Leave += new System.EventHandler(this.text_password1_LostFocus);
-            // 
-            // text_user
-            // 
-            this.text_user.Location = new System.Drawing.Point(32, 28);
-            this.text_user.Name = "text_user";
-            this.text_user.Size = new System.Drawing.Size(252, 28);
-            this.text_user.TabIndex = 0;
-            this.text_user.TextChanged += new System.EventHandler(this.text_user_TextChanged);
-            this.text_user.Enter += new System.EventHandler(this.text_user_GotFocus);
-            this.text_user.Leave += new System.EventHandler(this.text_user_LostFocus);
-            // 
-            // register
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 530);
-            this.Controls.Add(btnClose);
-            this.Controls.Add(this.reg_panel);
-            this.Controls.Add(this.regTitle);
-            this.Controls.Add(this.pictureBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "register";
-            this.Text = "register";
-            this.Load += new System.EventHandler(this.register_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
-            this.reg_panel.ResumeLayout(false);
-            this.reg_panel.PerformLayout();
+            this.Controls.Add(this.pnlHeader);
+            this.Controls.Add(this.lblUser);
+            this.Controls.Add(this.txtUser);
+            this.Controls.Add(this.lblPass1);
+            this.Controls.Add(this.txtPass1);
+            this.Controls.Add(this.lblPass2);
+            this.Controls.Add(this.txtPass2);
+            this.Controls.Add(this.chkShowPass);
+            this.Controls.Add(this.btnSubmit);
+            this.Controls.Add(this.btnCancel);
+
+            this.pnlHeader.ResumeLayout(false);
+            this.pnlHeader.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
-
-        #endregion
-
-        private System.Windows.Forms.PictureBox pictureBox;
-        private System.Windows.Forms.Label regTitle;
-        private System.Windows.Forms.Panel reg_panel;
-        private System.Windows.Forms.TextBox text_password2;
-        private System.Windows.Forms.TextBox text_password1;
-        private System.Windows.Forms.TextBox text_user;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Button btnlogin;
-        private System.Windows.Forms.Button btnregister;
     }
 }
